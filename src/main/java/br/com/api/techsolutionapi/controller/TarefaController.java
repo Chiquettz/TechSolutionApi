@@ -1,31 +1,34 @@
 package br.com.api.techsolutionapi.controller;
 
 import br.com.api.techsolutionapi.model.Tarefa;
+import br.com.api.techsolutionapi.service.TarefaService;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/tarefas")
 public class TarefaController {
 
-    private final List<Tarefa> tarefas = new ArrayList<>();
+    private final TarefaService tarefaService;
+
+    public TarefaController(TarefaService tarefaService) {
+        this.tarefaService = tarefaService;
+    }
 
     @PostMapping
     public Tarefa cadastrarTarefa(@RequestBody Tarefa tarefa) {
-        tarefas.add(tarefa);
-        return tarefa;
+        return tarefaService.cadastrarTarefa(tarefa);
     }
 
     @GetMapping
     public List<Tarefa> listarTarefas() {
-        return tarefas;
+        return tarefaService.listarTarefas();
     }
 
     @GetMapping("/{indice}")
     public Tarefa buscarTarefa(@PathVariable int indice) {
-        return tarefas.get(indice);
+        return tarefaService.buscarTarefa(indice);
     }
 
     @PutMapping("/{indice}")
@@ -33,12 +36,11 @@ public class TarefaController {
             @PathVariable int indice,
             @RequestBody Tarefa tarefa) {
 
-        tarefas.set(indice, tarefa);
-        return tarefa;
+        return tarefaService.atualizarTarefa(indice, tarefa);
     }
 
     @DeleteMapping("/{indice}")
     public Tarefa removerTarefa(@PathVariable int indice) {
-        return tarefas.remove(indice);
+        return tarefaService.removerTarefa(indice);
     }
 }
